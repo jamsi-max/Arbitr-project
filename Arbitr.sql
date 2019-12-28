@@ -52,8 +52,17 @@ CREATE TABLE profiles_company(
 	home_town VARCHAR(100),
 	is_deleted BIT,
 	INDEX (inn),
-	FOREIGN KEY (company_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE NO ACTION
+	FOREIGN KEY (company_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE NO ACTION,
+	FOREIGN KEY (photo_id) REFERENCES user_photos(id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
+
+-- Таблица фотографий
+DORP TABLE IF EXISTS user_photos;
+CREATE TABLE user_photos(
+	id SERIAL PRIMARY KEY,
+	link_id VARCHAR(255)
+)
+
 
 -- Таблица договоров
 DROP TABLE IF EXISTS form_contracts;
@@ -65,7 +74,7 @@ CREATE TABLE form_contracts(
 	contract TEXT,
 	start_work DATETIME,
 	end_work DATETIME,
-	price INT(10),
+	price DECIMAL,
 	created_at DATETIME DEFAULT NOW(),
 	updated_at DATETIME DEFAULT NOW() ON UPDATE NOW(),
 	INDEX (header_doc),
@@ -89,7 +98,7 @@ CREATE TABLE form_disputes(
 	respondent_id BIGINT(20) UNSIGNED NOT NULL,
 	contract_id BIGINT(20) UNSIGNED NOT NULL,
 	dispute_text TEXT,
-	dispute_price INT(10),
+	dispute_price DECIMAL,
 	created_at DATETIME DEFAULT NOW(),
 	updated_at DATETIME DEFAULT NOW() ON UPDATE NOW(),
 	FOREIGN KEY (applicant_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE NO ACTION,
